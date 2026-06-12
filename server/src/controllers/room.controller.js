@@ -46,7 +46,12 @@ export async function getRooms(req,res){
     try{
    
 
-    const rooms = await roomModel.find().populate("createdBy","username email").populate("members","username email")
+    const rooms = await roomModel.find({
+        $or: [
+            { roomName: { $not: /^dm_/ } },
+            { members: req.user.id }
+        ]
+    }).populate("createdBy","username email").populate("members","username email")
 
     return res.status(200).json({
         message:"found!",

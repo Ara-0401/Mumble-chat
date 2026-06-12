@@ -17,6 +17,22 @@ export async function sendMessage(req,res){
             })
         }
 
+        const room = await roomModel.findById(roomId);
+        if (!room) {
+            return res.status(404).json({ message: "Room not found" });
+        }
+
+        if (room.roomName.startsWith('dm_')) {
+            if (!room.members.includes(sender)) {
+                return res.status(403).json({ message: "You are not a member of this DM" });
+            }
+        } else {
+            // Auto-join public group rooms
+            if (!room.members.includes(sender)) {
+                await roomModel.findByIdAndUpdate(roomId, { $addToSet: { members: sender } });
+            }
+        }
+
         const newMessage= await messageModel.create({
             content,
             sender,
@@ -53,11 +69,25 @@ export async function getMessages(req,res){
         })
       }
 
-      // Add the user to the room's members list if not already present
-      const userId = req.user.id
-      await roomModel.findByIdAndUpdate(roomId, {
-        $addToSet: { members: userId }
-      })
+      const room = await roomModel.findById(roomId);
+      if (!room) {
+          return res.status(404).json({ message: "Room not found" });
+      }
+
+      const userId = req.user.id;
+
+      if (room.roomName.startsWith('dm_')) {
+          if (!room.members.includes(userId)) {
+              return res.status(403).json({ message: "You are not a member of this DM" });
+          }
+      } else {
+          // Add the user to the room's members list if not already present
+          if (!room.members.includes(userId)) {
+              await roomModel.findByIdAndUpdate(roomId, {
+                  $addToSet: { members: userId }
+              });
+          }
+      }
 
       const recievedMessage=await messageModel.find({
         room:roomId

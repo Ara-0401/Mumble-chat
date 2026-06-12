@@ -99,18 +99,13 @@ export async function login(req,res){
 
     try{
 
-        if((!username && !email)||!password){
+        if(!email || !password){
             return res.status(409).json({
                 message:"fields are required"
             })
         }
 
-        const user=await userModel.findOne({
-            $or:[
-                {username},
-                {email}
-            ]
-        })
+        const user=await userModel.findOne({ email })
 
         if(!user){
             return res.status(404).json({

@@ -42,8 +42,29 @@ io.on("connection",(socket)=>{
        }
     })
 
-  socket.on("join_room",(roomId)=>{
+  socket.on("join_room", async (roomId)=>{
      console.log("JOIN REQUEST:",roomId)
+
+     let userId = null;
+     for (const [id, sId] of userSocketMap.entries()) {
+         if (sId === socket.id) {
+             userId = id;
+             break;
+         }
+     }
+
+     if (userId) {
+         try {
+             const room = await roomModel.findById(roomId);
+             if (room && room.roomName.startsWith('dm_') && !room.members.includes(userId)) {
+                 console.log("Unauthorized join attempt by", userId, "to", roomId);
+                 return; // Reject unauthorized DM join
+             }
+         } catch(err) {
+             console.log("Error verifying room membership:", err);
+         }
+     }
+
       socket.join(roomId)
       console.log(socket.id,"joined",roomId )
     })
