@@ -4,10 +4,12 @@ import MessageBubble from './MessageBubble'
 import ChatInput from "./ChatInput"
 import instance from "../config/axios"
 import socket from "../config/socket"
+import InviteModal from "./InviteModal"
 
 function ChatWindow({ room, updateLastMessage, updateTime, incomingMessage, setIncomingMessage }) {
 
   const [messages, setMessages] = useState([])
+  const [showInviteModal, setShowInviteModal] = useState(false)
 
   const user = JSON.parse(localStorage.getItem("user"))
   const MY_ID = user?._id
@@ -128,6 +130,15 @@ function ChatWindow({ room, updateLastMessage, updateTime, incomingMessage, setI
           </div>
         </div>
         <div className='flex gap-1'>
+          {!room?.roomName?.startsWith("dm_") && (
+            <button 
+              onClick={() => setShowInviteModal(true)}
+              className='w-8 h-8 rounded-lg flex items-center justify-center text-[#71717a] hover:bg-[#2a2a2a] hover:text-[#e5e5e5] transition-colors'
+              title="Invite to Group"
+            >
+              <i className='ri-user-add-line' />
+            </button>
+          )}
           <button className='w-8 h-8 rounded-lg flex items-center justify-center text-[#71717a] hover:bg-[#2a2a2a] hover:text-[#e5e5e5] transition-colors'>
             <i className='ri-search-line' />
           </button>
@@ -153,6 +164,13 @@ function ChatWindow({ room, updateLastMessage, updateTime, incomingMessage, setI
         placeholder={`Message ${displayRoomName}`}
         roomId={room._id}
       />
+
+      {showInviteModal && (
+        <InviteModal 
+          roomId={room._id} 
+          onClose={() => setShowInviteModal(false)} 
+        />
+      )}
     </div>
   )
 }
