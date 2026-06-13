@@ -25,10 +25,8 @@ const userSocketMap= new Map()
 
 
 io.on("connection",(socket)=>{
-    console.log("user connected :",socket.id)
 
     socket.on("register", async (userId)=>{
-       console.log("registering user:",userId,"with socket id:",socket.id)
        userSocketMap.set(userId,socket.id)
         
        // Update user status in database
@@ -38,12 +36,10 @@ io.on("connection",(socket)=>{
            io.emit("user_status_changed", { userId, isOnline: true })
            io.emit("online_users", Array.from(userSocketMap.keys()))
        } catch (err) {
-           console.log("Error updating user status:", err)
        }
     })
 
   socket.on("join_room", async (roomId)=>{
-     console.log("JOIN REQUEST:",roomId)
 
      let userId = null;
      for (const [id, sId] of userSocketMap.entries()) {
@@ -57,20 +53,16 @@ io.on("connection",(socket)=>{
          try {
              const room = await roomModel.findById(roomId);
              if (room && room.roomName.startsWith('dm_') && !room.members.includes(userId)) {
-                 console.log("Unauthorized join attempt by", userId, "to", roomId);
                  return; // Reject unauthorized DM join
              }
          } catch(err) {
-             console.log("Error verifying room membership:", err);
          }
      }
 
       socket.join(roomId)
-      console.log(socket.id,"joined",roomId )
     })
 
     socket.on("typing",({roomId,username})=>{
-       console.log("typing in room:",roomId ,"by user:",username)
        socket.to(roomId).emit("user_typing",{username})
     })
 
@@ -88,7 +80,6 @@ io.on("connection",(socket)=>{
             // Broadcast to the room that messages were read by this user
             io.to(roomId).emit("messages_read", { roomId, userId });
         } catch (err) {
-            console.log("Error marking messages as read:", err);
         }
     })
 
@@ -97,32 +88,25 @@ io.on("connection",(socket)=>{
 
     socket.on("leave_room",(roomId)=>{
        socket.leave(roomId)
-    console.log(`user ${socket.id} left room ${roomId}`)
       
     })
 
 
     socket.on("send_message", async (message)=>{
-     console.log("server recieved message",message)
-     console.log("message room:",message.room)
 
      try{
       io.to(message.room).emit("receive_message",message)
-        console.log("message :",message.room)
      }
      catch(err){
-        console.log("error in send message:",err)
      }
 
 })
 
      socket.on("disconnect", () => {
-       console.log("user disconnected:", socket.id)
 
        for (const [userId, socketId] of userSocketMap.entries()) {
            if (socketId === socket.id) {
                userSocketMap.delete(userId)
-               console.log(`removed userId ${userId} from map`)
                 
                // Update user status in database
                userModel.findByIdAndUpdate(userId, { isOnline: false })
@@ -131,7 +115,7 @@ io.on("connection",(socket)=>{
                        io.emit("user_status_changed", { userId, isOnline: false })
                        io.emit("online_users", Array.from(userSocketMap.keys()))
                    })
-                   .catch(err => console.log("Error updating user status:", err))
+                   .catch(err => {})
                 
                break
            }
@@ -142,7 +126,6 @@ io.on("connection",(socket)=>{
 connectDB().then(()=>{
     const PORT = process.env.PORT || 3000;
     httpServer.listen(PORT,()=>{
-       console.log(`server is running on ${PORT} port`)
     })
 })
 

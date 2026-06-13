@@ -45,7 +45,6 @@ function RoomPanel() {
         })
         setOnlineUsers(initialOnline)
       } catch (err) {
-        console.log(err)
       }
     }
     fetchRooms()
@@ -61,7 +60,6 @@ function RoomPanel() {
 
   useEffect(() => {
     function handleStatusChange({ userId, isOnline }) {
-      console.log(`User ${userId} is now ${isOnline ? 'online' : 'offline'}`)
       setOnlineUsers(prev => ({
         ...prev,
         [userId]: isOnline
@@ -74,7 +72,6 @@ function RoomPanel() {
 
   useEffect(() => {
     function handleReceive(message) {
-      console.log("RoomPanel received:", message)
 
       const currentActiveRoomId = activeRoomIdRef.current
 
@@ -124,8 +121,6 @@ function RoomPanel() {
       setNewRoomName('')
       setShowModal(false)
     } catch (err) {
-      console.log("response status", err.response?.status)
-      console.log("Data", err.response?.data)
     }
   }
 

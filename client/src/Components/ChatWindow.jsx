@@ -37,7 +37,6 @@ function ChatWindow({ room, updateLastMessage, updateTime, incomingMessage, setI
         setMessages(res.data.recievedMessage)
       } catch (err) {
         alert("error in fetching message")
-        console.log("error in fetching message", err.response.data)
       }
     }
 

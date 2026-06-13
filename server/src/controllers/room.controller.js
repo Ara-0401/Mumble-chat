@@ -57,7 +57,6 @@ export async function getRooms(req,res){
 
 }
 catch(err){
-      console.log(err)
     return res.status(500).json({
       
         message:"internal server issue"
@@ -162,7 +161,6 @@ export async function getRooms(req,res){
 
 }
 catch(err){
-      console.log(err)
     return res.status(500).json({
       
         message:"internal server issue"
@@ -210,7 +208,6 @@ export async function createOrGetDM(req, res) {
             room
         });
     } catch (err) {
-        console.log(err);
         return res.status(500).json({ message: "Internal server issue" });
     }
 }
@@ -257,7 +254,6 @@ export async function inviteToGroup(req, res) {
         });
 
     } catch (err) {
-        console.log(err);
         return res.status(500).json({ message: 'Internal server error' });
     }
 }

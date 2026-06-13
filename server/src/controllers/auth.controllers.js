@@ -166,7 +166,6 @@ export async function login(req,res){
 
     }
     catch(err){
-        console.log(err)
         return res.status(500).json({
             message:"Internal server issue"
         })
@@ -248,7 +247,6 @@ export async function refreshToken(req,res){
 
     }
     catch(err){
-        console.log(err)
         return res.status(401).json({
             message:"invalid or expired token"
         })
@@ -301,7 +299,6 @@ export async function logout(req,res){
         })
     }
     catch(err){
-        console.log(err)
         return res.status(500).json({
             message:"internal server issue"
         })
@@ -332,7 +329,6 @@ export async function searchUsers(req, res) {
         });
 
     } catch (err) {
-        console.log(err);
         return res.status(500).json({
             message: "Internal server error during search"
         });
@@ -368,7 +364,6 @@ export async function updateUser(req, res) {
             user: updatedUser
         });
     } catch (err) {
-        console.log(err);
         return res.status(500).json({ message: "Internal server error" });
     }
 }

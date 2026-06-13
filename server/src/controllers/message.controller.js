@@ -2,8 +2,6 @@ import messageModel  from "../models/message.model.js";
 import roomModel from "../models/room.model.js"
 
 export async function sendMessage(req,res){
-  console.log("params:", req.params)  
-    console.log("roomId:", req.params.roomId)
 
     const {content}=req.body
     const sender=req.user.id
@@ -49,7 +47,6 @@ export async function sendMessage(req,res){
         })
     }
     catch(err){
-        console.log(err)
         return res.status(500).json({
             message:"Internal server issue"
         })
@@ -101,7 +98,6 @@ export async function getMessages(req,res){
     }
 
     catch(err){
-        console.log(err)
         return res.status(500).json({
             message:"internal server issue"
         })

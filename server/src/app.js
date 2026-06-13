@@ -18,7 +18,6 @@ app.use(cors(
 ))
 app.use(morgan("dev"))
 app.use(cookieParser())
-// console.log("Mounting auth routes")
 
 app.use("/api/auth",authRoutes)
 app.use("/api/room",roomRoutes)

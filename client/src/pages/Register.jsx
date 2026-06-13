@@ -18,14 +18,11 @@ function handleLogin(){
 }
 
  async function handleSubmit(){
-    console.log(form)
     try{
    const response= await instance.post("/api/auth/register",form)
-   console.log(response)
      navigate("/")
     }
     catch(err){
-        console.log("error in registering",err)
     }
 }
 

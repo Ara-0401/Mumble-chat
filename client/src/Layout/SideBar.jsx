@@ -14,7 +14,6 @@ function SideBar(){
 
   const user=JSON.parse (localStorage.getItem("user"))
   const isCurrentUserOnline = user && onlineUsers[user._id]
-  console.log(user)
 
  
 

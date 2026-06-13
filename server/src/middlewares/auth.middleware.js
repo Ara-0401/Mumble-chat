@@ -33,11 +33,9 @@ export async function auth(req,res,next){
 
     const authHeader = req.headers["authorization"];
 
-    console.log("Authorization Header:", authHeader);
 
     const token = authHeader && authHeader.split(" ")[1];
 
-    console.log("Token:", token);
 
     try {
 
@@ -49,7 +47,6 @@ export async function auth(req,res,next){
 
         const decoded = jwt.verify(token, config.JWT_SECRET);
 
-        console.log("Decoded:", decoded);
 
         req.user = decoded;
 
@@ -57,8 +54,6 @@ export async function auth(req,res,next){
 
     } catch(err){
 
-        console.log("JWT ERROR:", err.name);
-        console.log("JWT MESSAGE:", err.message);
 
         return res.status(401).json({
             message:"expired or invalid token"

@@ -27,7 +27,6 @@ function Login(){
    async  function handleSubmit(){
     try{
         const response=await instance.post("/api/auth/login",form)
-        console.log("respomse data is:", response.data)
         
         localStorage.setItem("user",JSON.stringify(response.data.user))
         localStorage.setItem("accessToken", response.data.accessToken)
@@ -39,7 +38,6 @@ function Login(){
     }
     catch(err){
         alert(err.response?.data?.message)
-        console.log( "error in loggin in ",err)
     }
 
     }

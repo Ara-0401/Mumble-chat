@@ -22,7 +22,6 @@ function Settings() {
       setUser(updatedUser)
       setMessage("Profile updated successfully!")
     } catch (err) {
-      console.log(err)
       setMessage(err.response?.data?.message || "Failed to update profile")
     } finally {
       setLoading(false)
@@ -35,7 +34,6 @@ function Settings() {
       localStorage.removeItem("token")
       navigate("/")
     }).catch(err => {
-      console.log("logout error", err)
       localStorage.removeItem("user")
       localStorage.removeItem("token")
       navigate("/")
